@@ -26,6 +26,25 @@ python main.py
 - `latex/computational_cost.png`: Execution time profile of the pipeline stages.
 - `logs/execution_log_YYYYMMDD_HHMMSS.txt`: Text file with full traceability of the parameters used and the execution times.
 
+## Key Results & Visualizations
+
+### 1. Early Fault Detection (Slope Entropy Evolution)
+
+![Slope Entropy Evolution over Time](latex/entropy_evolution.png)
+
+* **Baseline vs. Degradation:** During initial operation (Records 0–41), Slope Entropy remains stable around $\approx 3.01$, representing high-complexity random friction noise characteristic of a healthy bearing.
+* **Automated Turning Point Detection:** At **Record 42** (2004.02.17 08:02:39), the system flags an automatic turning point as entropy drops significantly below the statistical baseline ($> 3\sigma$)[cite: 4, 5]. This drop reflects the onset of a localized outer race defect, transitioning the signal into a more deterministic pattern long before total mechanical failure[cite: 1, 5, 7].
+* **Key Advantage:** Unlike traditional time-domain metrics (e.g., RMS or Peak-to-Peak) which primarily spike during severe damage[cite: 5], Slope Entropy captures the subtle, non-linear dynamic shifts at early degradation stages[cite: 1, 5].
+
+---
+
+### 2. Execution Time Profile & Edge Feasibility
+
+![Computational Cost per Pipeline Stage](latex/computational_cost.png)
+
+* **Feature Extraction Efficiency:** Calculating Slope Entropy across all 72 time windows (>147,000 samples) takes **just $\approx 0.216$ seconds** due to backend C-vectorization in NumPy[cite: 4, 6].
+* **Instantaneous Detection:** The statistical baseline decision logic executes in **$\approx 0.0001$ seconds**[cite: 6].
+* **Edge Deployment Ready:** While initial raw file processing takes $\approx 1.22$ seconds (bypassed in live stream setups)[cite: 6], the core diagnostic pipeline incurs negligible computational overhead[cite: 6, 7], making it fully feasible for real-time monitoring on resource-constrained hardware such as the **Raspberry Pi 5**[cite: 1, 4].
 ## Script Descriptions
 
 The repository is modularized into the following scripts:
